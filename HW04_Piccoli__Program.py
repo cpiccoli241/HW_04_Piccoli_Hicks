@@ -6,7 +6,7 @@ import numpy as np
 from BirdBathFunction_425_v420 import BirdbathFunc425
 from BirdBathFunction_448_v420 import BirdbathFunc448
 
-def gradientDescentTESTER():
+def gradientDescentTESTER(func):
     # best = 0
     # bestRoll = 0
     # bestTwist = 0
@@ -15,7 +15,7 @@ def gradientDescentTESTER():
     #     for tilt in range(-10, 100):
     #         for twist in range(-10, 100):
     #             print(roll, tilt, twist)
-    #             nn = BirdbathFunc448(roll, tilt, twist)
+    #             nn = func(roll, tilt, twist)
     #             if nn > best:
     #                 best = nn
     #                 bestRoll = roll
@@ -29,7 +29,7 @@ def gradientDescentTESTER():
     bestTilt = 0
     bestTwist = 0
 
-    prev = BirdbathFunc448(bestRoll, bestTilt, bestTwist)
+    prev = func(bestRoll, bestTilt, bestTwist)
     prevprev = None
     delta = 5
 
@@ -38,14 +38,14 @@ def gradientDescentTESTER():
     bests = []
 
     while not foundPeak:
-        rollUp = BirdbathFunc448(bestRoll + delta, bestTilt, bestTwist)
-        rollDown = BirdbathFunc448(bestRoll - delta, bestTilt, bestTwist)
+        rollUp = func(bestRoll + delta, bestTilt, bestTwist)
+        rollDown = func(bestRoll - delta, bestTilt, bestTwist)
 
-        tiltUp = BirdbathFunc448(bestRoll, bestTilt + delta, bestTwist)
-        tiltDown = BirdbathFunc448(bestRoll, bestTilt - delta, bestTwist)
+        tiltUp = func(bestRoll, bestTilt + delta, bestTwist)
+        tiltDown = func(bestRoll, bestTilt - delta, bestTwist)
 
-        twistUp = BirdbathFunc448(bestRoll, bestTilt, bestTwist + delta)
-        twistDown = BirdbathFunc448(bestRoll, bestTilt, bestTwist - delta)
+        twistUp = func(bestRoll, bestTilt, bestTwist + delta)
+        twistDown = func(bestRoll, bestTilt, bestTwist - delta)
 
         if rollUp > rollDown and rollUp > tiltUp and rollUp > tiltDown and rollUp > twistUp and rollUp > twistDown:
             best = rollUp
@@ -141,7 +141,8 @@ def gradientDescentTest(start1, start2, start3, delta=.1, steps=100000):
 
 
 def main():
-    gradientDescentTESTER()
+    gradientDescentTESTER(BirdbathFunc448)
+    gradientDescentTESTER(BirdbathFunc425)
     print(gradientDescentTest(9,2,15)[-1])
 
 
