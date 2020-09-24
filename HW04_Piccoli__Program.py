@@ -5,6 +5,7 @@
 import numpy as np
 from BirdBathFunction_425_v420 import BirdbathFunc425
 from BirdBathFunction_448_v420 import BirdbathFunc448
+from matplotlib import pyplot as py
 
 def gradientDescentTESTER(func, initialRoll=0, initialTilt=0, initalTwist=0):
     best = 0
@@ -110,15 +111,24 @@ def gradientDescentTest(start1, start2, start3, delta=.1, steps=100000, func = B
     return volumes
 
 
+def justSee(func, delta = .1, steps = 10000, start2 = 0, start3 = 0):
+    l = []
+    for i in range(0, steps):
+        l.append(func(i*delta, start2, start3))
+
+    py.plot(np.arange(0, steps), l)
+    py.show()
+
 def main():
-    print("Testing 448")
+    print("Testing 448 defaults 0, 0, 0,")
     gradientDescentTESTER(BirdbathFunc448)
-    print("Testing 425")
+    print("Testing 425 defaults 0, 0, 0,")
     gradientDescentTESTER(BirdbathFunc425)
 
 
     print('Testing 425 other function', gradientDescentTest(9,2,15)[-1])
 
+    justSee(BirdbathFunc425)
 
 if __name__ == '__main__':
     main()
