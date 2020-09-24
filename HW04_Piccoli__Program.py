@@ -18,7 +18,6 @@ def gradientDescentTESTER(func, initialRoll=0, initialTilt=0, initalTwist=0):
 
     foundPeak = False
 
-    bests = []
 
     while not foundPeak:
         rollUp = func(bestRoll + delta, bestTilt, bestTwist)
@@ -67,7 +66,6 @@ def gradientDescentTESTER(func, initialRoll=0, initialTilt=0, initalTwist=0):
     print(best, bestRoll, bestTilt, bestTwist)
 
     print('###########################################################################################')
-    return bests
 
 
 def gradientDescentTest(start1, start2, start3, delta=.1, steps=100000, func = BirdbathFunc425):
