@@ -13,8 +13,6 @@ def gradientDescentTESTER(func, initialRoll=0, initialTilt=0, initalTwist=0):
     bestTilt = initialTilt
     bestTwist = initalTwist
 
-    prev = func(bestRoll, bestTilt, bestTwist)
-    prevprev = None
     delta = 5
 
     foundPeak = False
@@ -64,9 +62,9 @@ def gradientDescentTESTER(func, initialRoll=0, initialTilt=0, initalTwist=0):
             delta = delta / 2
 
 
-    print(best, bestRoll, bestTilt, bestTwist)
 
-    print('###########################################################################################')
+
+    return best
 
 
 def gradientDescentTest(start1, start2, start3, delta=.1, steps=100000, func = BirdbathFunc425):
@@ -120,15 +118,19 @@ def justSee(func, delta = .1, steps = 10000, start2 = 0, start3 = 0):
     py.show()
 
 def main():
-    print("Testing 448 defaults 0, 0, 0,")
-    gradientDescentTESTER(BirdbathFunc448)
-    print("Testing 425 defaults 0, 0, 0,")
-    gradientDescentTESTER(BirdbathFunc425)
-
-
-    print('Testing 425 other function', gradientDescentTest(9,2,15)[-1])
-
-    justSee(BirdbathFunc425)
+    best448 = 0
+    best425 = 0
+    for roll in range(0, 18):
+        for twist in range(0, 18):
+            for tilt in range(0, 18):
+                output = gradientDescentTESTER(BirdbathFunc448, roll*80, twist*80, tilt*80)
+                if output > best448:
+                    best448 = output
+                output = gradientDescentTESTER(BirdbathFunc425, roll*80, twist*80, tilt*80)
+                if output > best425:
+                    best425 = output
+                print(roll, twist, tilt)
+    print(best425, best448)
 
 if __name__ == '__main__':
     main()

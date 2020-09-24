@@ -131,8 +131,8 @@ if __name__ == '__main__' :
         else:
             foundPeak = True
         #print(best)
-        print(best, bestRoll, bestTilt, bestTwist)
-        print('vars:', rollUp, rollDown, twistUp, twistDown, tiltUp, tiltDown)
+        #print(best, bestRoll, bestTilt, bestTwist)
+        #print('vars:', rollUp, rollDown, twistUp, twistDown, tiltUp, tiltDown)
 
     print(best, bestRoll, bestTilt, bestTwist)
 
