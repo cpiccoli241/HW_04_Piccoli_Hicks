@@ -6,11 +6,11 @@ import numpy as np
 from BirdBathFunction_425_v420 import BirdbathFunc425
 from BirdBathFunction_448_v420 import BirdbathFunc448
 
-def gradientDescentTESTER(func):
+def gradientDescentTESTER(func, initialRoll=0, initialTilt=0, initalTwist=0):
     best = 0
-    bestRoll = 0
-    bestTilt = 0
-    bestTwist = 0
+    bestRoll = initialRoll
+    bestTilt = initialTilt
+    bestTwist = initalTwist
 
     prev = func(bestRoll, bestTilt, bestTwist)
     prevprev = None
@@ -70,7 +70,7 @@ def gradientDescentTESTER(func):
     return bests
 
 
-def gradientDescentTest(start1, start2, start3, delta=.1, steps=100000):
+def gradientDescentTest(start1, start2, start3, delta=.1, steps=100000, func = BirdbathFunc425):
     '''
     Okay so I just want to try optimizing one point on the sphere
     :param start1:
@@ -81,17 +81,17 @@ def gradientDescentTest(start1, start2, start3, delta=.1, steps=100000):
     point1 = start1
     point2 = start1 + delta
 
-    volumeLast = BirdbathFunc425( point1, start2, start3 )
-    volumeNext = BirdbathFunc425( point2, start2, start3)
+    volumeLast = func( point1, start2, start3 )
+    volumeNext = func( point2, start2, start3)
 
     if volumeLast < volumeNext:
         point1 = point2 + delta
         volumeLast = volumeNext
-        volumeNext = BirdbathFunc425(point1, start2, start3)
+        volumeNext = func(point1, start2, start3)
     elif volumeLast > volumeNext:
         point1 = point1 - delta
         volumeLast = volumeNext
-        volumeNext = BirdbathFunc425(point1, start2, start3)
+        volumeNext = func(point1, start2, start3)
 
     volumes = []
 
@@ -118,7 +118,8 @@ def main():
     print("Testing 425")
     gradientDescentTESTER(BirdbathFunc425)
 
-    print(gradientDescentTest(9,2,15)[-1])
+
+    print('Testing 425 other function', gradientDescentTest(9,2,15)[-1])
 
 
 if __name__ == '__main__':
