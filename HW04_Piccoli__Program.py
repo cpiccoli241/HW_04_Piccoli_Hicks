@@ -143,6 +143,7 @@ def gradientDescentTest(start1, start2, start3, delta=.1, steps=100000):
 def main():
     gradientDescentTESTER(BirdbathFunc448)
     gradientDescentTESTER(BirdbathFunc425)
+
     print(gradientDescentTest(9,2,15)[-1])
 
 
