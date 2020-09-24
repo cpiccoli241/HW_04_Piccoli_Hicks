@@ -7,23 +7,6 @@ from BirdBathFunction_425_v420 import BirdbathFunc425
 from BirdBathFunction_448_v420 import BirdbathFunc448
 
 def gradientDescentTESTER(func):
-    # best = 0
-    # bestRoll = 0
-    # bestTwist = 0
-    # bestTilt = 0
-    # for roll in range(-10, 100):
-    #     for tilt in range(-10, 100):
-    #         for twist in range(-10, 100):
-    #             print(roll, tilt, twist)
-    #             nn = func(roll, tilt, twist)
-    #             if nn > best:
-    #                 best = nn
-    #                 bestRoll = roll
-    #                 bestTilt = tilt
-    #                 bestTwist = twist
-    # print(best, bestRoll, bestTilt, bestTwist)
-    # 0.4983496320637728 -8 -5 31
-
     best = 0
     bestRoll = 0
     bestTilt = 0
@@ -50,34 +33,26 @@ def gradientDescentTESTER(func):
         if rollUp > rollDown and rollUp > tiltUp and rollUp > tiltDown and rollUp > twistUp and rollUp > twistDown:
             best = rollUp
             bestRoll += delta
-            print("roll up")
 
         elif rollDown > rollUp and rollDown > tiltUp and rollDown > tiltDown and rollDown > twistUp and rollDown > twistDown:
             best = rollDown
             bestRoll -= delta
-            print("roll down")
 
         elif tiltUp > rollUp and tiltUp > rollDown and tiltUp > tiltDown and tiltUp > twistUp and tiltUp > twistDown:
             best = tiltUp
             bestTilt += delta
-            print("tilt up", tiltUp, tiltDown)
 
         elif tiltDown > rollUp and tiltDown > rollDown and tiltDown > tiltUp and tiltDown > twistUp and tiltDown > twistDown:
             best = tiltDown
             bestTilt -= delta
-            print("tilt down", tiltUp, tiltDown)
 
         elif twistUp > rollUp and twistUp > rollDown and twistUp > tiltUp and twistUp > tiltDown and twistUp > twistDown:
             best = twistUp
             bestTwist += delta
-            print("twist up", twistUp, twistDown)
-
 
         elif twistDown > rollUp and twistDown > rollDown and twistDown > tiltUp and twistDown > tiltDown and twistDown > twistUp:
             best = twistDown
             bestTwist -= delta
-            print("twist down", twistUp, twistDown)
-
 
         else:
             foundPeak = True
@@ -88,9 +63,6 @@ def gradientDescentTESTER(func):
         if prevprev == best:
             delta = delta / 2
 
-        # print(best)
-        print(best, bestRoll, bestTilt, bestTwist)
-        print('vars:', rollUp, rollDown, twistUp, twistDown, tiltUp, tiltDown)
 
     print(best, bestRoll, bestTilt, bestTwist)
 
@@ -141,7 +113,9 @@ def gradientDescentTest(start1, start2, start3, delta=.1, steps=100000):
 
 
 def main():
+    print("Testing 448")
     gradientDescentTESTER(BirdbathFunc448)
+    print("Testing 425")
     gradientDescentTESTER(BirdbathFunc425)
 
     print(gradientDescentTest(9,2,15)[-1])
