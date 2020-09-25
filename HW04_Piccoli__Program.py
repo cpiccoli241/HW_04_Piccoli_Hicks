@@ -5,7 +5,78 @@
 import numpy as np
 from BirdBathFunction_425_v420 import BirdbathFunc425
 from BirdBathFunction_448_v420 import BirdbathFunc448
+from random import random
 from matplotlib import pyplot as py
+
+def stochGradientDescent(func, initialRoll = 0, initialTilt = 0, initialTwist = 0, learningRate = 1, stepsize = 4, steps = 100000):
+
+
+    bestRoll = initialRoll
+    bestTilt = initialTilt
+    bestTwist = initialTwist
+
+    nextRoll = initialRoll + (random()*2-1)*stepsize
+    nextTilt = initialTilt + (random()*2-1)*stepsize
+    nextTwist = initialTwist + + (random()*2-1)*stepsize
+
+    volumePrev = func(initialRoll, initialTilt, initialTwist)
+    volumeNext = func(nextRoll, nextTilt, nextTwist)
+
+    volumeBest = volumePrev
+
+    if volumeBest < volumeNext:
+        bestRoll = nextRoll
+        bestTilt = nextTilt
+        bestTwist = nextTwist
+        volumeBest = volumeNext
+
+    while volumeBest + 5/(10**(3)) < 0.5:
+
+        # This is the gradient
+        derivRoll = (volumeNext-volumePrev)/(nextRoll - initialRoll)
+        derivTilt = (volumeNext - volumePrev) / (nextTilt - initialTilt)
+        derivTwist = (volumeNext - volumePrev) / (nextTwist - initialTwist)
+
+        # reset some data
+        initialRoll = nextRoll
+        initialTilt = nextTilt
+        initialTwist = nextTwist
+
+        # find the next point
+        nextRoll = nextRoll+learningRate*derivRoll
+        nextTilt = nextTilt+learningRate*derivTilt
+        nextTwist = nextTwist + learningRate*derivTwist
+
+        volumeNext = func(nextRoll, nextTilt, nextTwist)
+
+        if volumeNext > volumeBest:
+            bestRoll = nextRoll
+            bestTilt = nextTilt
+            bestTwist = nextTwist
+            volumeBest = volumeNext
+
+        # pick a random point
+        nextRoll = initialRoll + (random() * 2 - 1) * stepsize
+        nextTilt = initialTilt + (random() * 2 - 1) * stepsize
+        nextTwist = initialTwist + + (random() * 2 - 1) * stepsize
+
+        volumeNext = func(nextRoll, nextTilt, nextTwist)
+
+        # maybe its better I probably shouldnt do this though
+        if volumeNext > volumeBest:
+            bestRoll = nextRoll
+            bestTilt = nextTilt
+            bestTwist = nextTwist
+            volumeBest = volumeNext
+
+
+
+        # print(volumeBest)
+
+    print(bestRoll, bestTilt, bestTwist)
+    print(volumeBest)
+    return [bestRoll, bestTilt, bestTwist]
+
 
 def gradientDescentTESTER(func, initialRoll=0, initialTilt=0, initalTwist=0):
     best = 0
@@ -48,8 +119,13 @@ def gradientDescentTESTER(func, initialRoll=0, initialTilt=0, initalTwist=0):
         # if the best value hasn't changed for two iterations, decrease delta
         prevprev = prev
         prev = best
+        prevprev = prev
+
         if prevprev == best:
             delta = delta / 2
+
+
+
 
     return best
 
@@ -104,20 +180,26 @@ def justSee(func, delta = .1, steps = 10000, start2 = 0, start3 = 0):
     py.plot(np.arange(0, steps), l)
     py.show()
 
+
+
 def main():
     best448 = 0
     best425 = 0
-    for roll in range(0, 4):
-        for twist in range(0, 4):
-            for tilt in range(0, 4):
-                #output = gradientDescentTESTER(BirdbathFunc448, roll*80, twist*80, tilt*80)
-                #if output > best448:
-                #    best448 = output
-                output = gradientDescentTESTER(BirdbathFunc425, roll*80, twist*80, tilt*80)
-                if output > best425:
-                    best425 = output
+
+    '''
+    for roll in range(0, 18):
+        for twist in range(0, 18):
+            for tilt in range(0, 18):
+                output = gradientDescentTESTER(BirdbathFunc448, roll*80, twist*80, tilt*80)
+                if output > best448:
+                    best448 = output
                 print(roll, twist, tilt)
-    print(best425)
+    '''
+
+    stochGradientDescent(BirdbathFunc425)
+    stochGradientDescent(BirdbathFunc448)
+
+    # print(best425, best448)
 
 if __name__ == '__main__':
     main()
