@@ -13,56 +13,43 @@ def gradientDescentTESTER(func, initialRoll=0, initialTilt=0, initalTwist=0):
     bestTilt = initialTilt
     bestTwist = initalTwist
 
+    prev = 0
+
     delta = 5
 
-    foundPeak = False
+    # stop trying when delta approaches 0
+    # I found this value of delta gave me a return value > .499 for 425
+    # brute-forcing 425 with many many values gave me .5 so it's accurate
+    while delta >= .01:
+        # store return value and params as [( returnValue, roll, tilt, twist )]
+        funcValuesParams = []
+        for rollDelta in range(-1, 1):
+            for tiltDelta in range(-1, 1):
+                for twistDelt in range(-1, 1):
 
+                    # brute force try the function with each set of parameters
+                    value = func(bestRoll + (delta*rollDelta), bestTilt + (delta*tiltDelta), bestTwist + (delta+twistDelt))
 
-    while not foundPeak:
-        rollUp = func(bestRoll + delta, bestTilt, bestTwist)
-        rollDown = func(bestRoll - delta, bestTilt, bestTwist)
+                    # save what's returned
+                    funcValuesParams.append((value, rollDelta, tiltDelta, twistDelt))
 
-        tiltUp = func(bestRoll, bestTilt + delta, bestTwist)
-        tiltDown = func(bestRoll, bestTilt - delta, bestTwist)
+        # sort the list so the tuple with the highest return value is first
+        funcValuesParams.sort(key=lambda x: x[0], reverse=True)
 
-        twistUp = func(bestRoll, bestTilt, bestTwist + delta)
-        twistDown = func(bestRoll, bestTilt, bestTwist - delta)
+        # grab the tuple
+        bestParams = funcValuesParams[0]
+        best = bestParams[0]
 
-        if rollUp > rollDown and rollUp > tiltUp and rollUp > tiltDown and rollUp > twistUp and rollUp > twistDown:
-            best = rollUp
-            bestRoll += delta
+        # adjust the variables based on if parameters changed
+        bestRoll += bestParams[1] * delta
+        bestTilt += bestParams[2] * delta
+        bestTwist += bestParams[3] * delta
 
-        elif rollDown > rollUp and rollDown > tiltUp and rollDown > tiltDown and rollDown > twistUp and rollDown > twistDown:
-            best = rollDown
-            bestRoll -= delta
-
-        elif tiltUp > rollUp and tiltUp > rollDown and tiltUp > tiltDown and tiltUp > twistUp and tiltUp > twistDown:
-            best = tiltUp
-            bestTilt += delta
-
-        elif tiltDown > rollUp and tiltDown > rollDown and tiltDown > tiltUp and tiltDown > twistUp and tiltDown > twistDown:
-            best = tiltDown
-            bestTilt -= delta
-
-        elif twistUp > rollUp and twistUp > rollDown and twistUp > tiltUp and twistUp > tiltDown and twistUp > twistDown:
-            best = twistUp
-            bestTwist += delta
-
-        elif twistDown > rollUp and twistDown > rollDown and twistDown > tiltUp and twistDown > tiltDown and twistDown > twistUp:
-            best = twistDown
-            bestTwist -= delta
-
-        else:
-            foundPeak = True
-
-        prev = best
+        # if the best value hasn't changed for two iterations, decrease delta
         prevprev = prev
-
+        prev = best
         if prevprev == best:
             delta = delta / 2
-
-
-
 
     return best
 
@@ -120,17 +107,17 @@ def justSee(func, delta = .1, steps = 10000, start2 = 0, start3 = 0):
 def main():
     best448 = 0
     best425 = 0
-    for roll in range(0, 18):
-        for twist in range(0, 18):
-            for tilt in range(0, 18):
-                output = gradientDescentTESTER(BirdbathFunc448, roll*80, twist*80, tilt*80)
-                if output > best448:
-                    best448 = output
+    for roll in range(0, 4):
+        for twist in range(0, 4):
+            for tilt in range(0, 4):
+                #output = gradientDescentTESTER(BirdbathFunc448, roll*80, twist*80, tilt*80)
+                #if output > best448:
+                #    best448 = output
                 output = gradientDescentTESTER(BirdbathFunc425, roll*80, twist*80, tilt*80)
                 if output > best425:
                     best425 = output
                 print(roll, twist, tilt)
-    print(best425, best448)
+    print(best425)
 
 if __name__ == '__main__':
     main()
